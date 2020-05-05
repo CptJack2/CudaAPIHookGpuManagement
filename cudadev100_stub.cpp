@@ -3,9 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define TRACE_API_CALL
+
 static void *cudadev_handle = nullptr;
 void LoadLibrary() {
-	cudadev_handle = dlopen("/usr/local/cuda/lib64/stub/libcuda.so", RTLD_NOW | RTLD_LOCAL);
+	cudadev_handle = dlopen("/usr/lib/x86_64-linux-gnu/libcuda.so.1orig", RTLD_NOW | RTLD_LOCAL);
 	if (!cudadev_handle) {
 		printf("original libcudart.so not found, exiting\n");
 		exit(1);
@@ -433,6 +435,10 @@ CUresult CUDAAPI cuMemGetInfo(size_t *free, size_t *total) {
 }
 
 CUresult CUDAAPI cuMemAlloc(CUdeviceptr *dptr, size_t bytesize) {
+#ifdef TRACE_API_CALL
+	printf("cuMemAlloc wrapper called\n");
+	//system("touch /home/cptjack/cuMemAlloc");
+#endif
 	using FuncPtr = CUresult(CUDAAPI *)(CUdeviceptr *, size_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuMemAlloc_v2");
 	if (!func_ptr) return GetSymbolNotFoundError();
@@ -440,6 +446,10 @@ CUresult CUDAAPI cuMemAlloc(CUdeviceptr *dptr, size_t bytesize) {
 }
 
 CUresult CUDAAPI cuMemAllocPitch(CUdeviceptr *dptr, size_t *pPitch, size_t WidthInBytes, size_t Height, unsigned int ElementSizeBytes) {
+#ifdef TRACE_API_CALL
+	printf("cuMemAllocPitch wrapper called\n");
+	//system("touch /home/cptjack/cuMemAllocPitch");
+#endif
 	using FuncPtr = CUresult(CUDAAPI *)(CUdeviceptr *, size_t *, size_t, size_t, unsigned int);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuMemAllocPitch_v2");
 	if (!func_ptr) return GetSymbolNotFoundError();
@@ -461,6 +471,10 @@ CUresult CUDAAPI cuMemGetAddressRange(CUdeviceptr *pbase, size_t *psize, CUdevic
 }
 
 CUresult CUDAAPI cuMemAllocHost(void **pp, size_t bytesize) {
+#ifdef TRACE_API_CALL
+	printf("cuMemAllocHost wrapper called\n");
+	//system("touch /home/cptjack/cuMemAllocHost");
+#endif
 	using FuncPtr = CUresult(CUDAAPI *)(void **, size_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuMemAllocHost_v2");
 	if (!func_ptr) return GetSymbolNotFoundError();
@@ -496,6 +510,10 @@ CUresult CUDAAPI cuMemHostGetFlags(unsigned int *pFlags, void *p) {
 }
 
 CUresult CUDAAPI cuMemAllocManaged(CUdeviceptr *dptr, size_t bytesize, unsigned int flags) {
+#ifdef TRACE_API_CALL
+	printf("cuMemAllocManaged wrapper called\n");
+	//system("touch /home/cptjack/cuMemAllocManaged");
+#endif
 	using FuncPtr = CUresult(CUDAAPI *)(CUdeviceptr *, size_t, unsigned int);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuMemAllocManaged");
 	if (!func_ptr) return GetSymbolNotFoundError();
