@@ -8,7 +8,7 @@
 static void *cudadev_handle = nullptr;
 
 void LoadLibrary() {
-	cudadev_handle = dlopen("/usr/local/cuda/lib64/stub/libcuda.so", RTLD_NOW | RTLD_LOCAL);
+	cudadev_handle = dlopen("/usr/local/cuda/lib64/stub/libcuda.so.1.orig", RTLD_NOW | RTLD_LOCAL);
 	if (!cudadev_handle) {
 		printf("original libcudart.so not found, exiting\n");
 		exit(1);
