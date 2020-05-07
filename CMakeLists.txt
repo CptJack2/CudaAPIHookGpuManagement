@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-INCLUDE_DIRECTORIES(/usr/local/cuda/include)
+INCLUDE_DIRECTORIES(/usr/local/cuda/include include)
 link_directories(/usr/local/cuda/lib64/stub)
 
 add_library(cudart SHARED cudart100_stub.cpp)

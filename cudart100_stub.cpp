@@ -1,11 +1,12 @@
 #include <dlfcn.h>
-#include </usr/local/cuda/include/cuda_runtime_api.h>
+#include <cuda_runtime_api.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #define TRACE_API_CALL
 
-static void *cudart_handle= nullptr;
+static void *cudart_handle = nullptr;
+
 void LoadLibrary() {
 	cudart_handle = dlopen("/usr/local/cuda/lib64/libcudart.so.10.0.orig", RTLD_NOW | RTLD_LOCAL);
 	if (!cudart_handle) {
@@ -14,10 +15,10 @@ void LoadLibrary() {
 	}
 }
 
-template <typename T>
-T LoadSymbol(const char* symbol_name) {
-	if(!cudart_handle) LoadLibrary();
-	void* symbol = dlsym(cudart_handle, symbol_name);
+template<typename T>
+T LoadSymbol(const char *symbol_name) {
+	if (!cudart_handle) LoadLibrary();
+	void *symbol = dlsym(cudart_handle, symbol_name);
 	return reinterpret_cast<T>(symbol);
 }
 
@@ -63,12 +64,12 @@ extern __host__ cudaError_t CUDARTAPI cudaDeviceSetLimit(enum cudaLimit limit,
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaDeviceGetLimit(size_t *pValue, enum cudaLimit limit) {
 #ifdef TRACE_API_CALL
-printf("cudaDeviceGetLimit wrapper called\n");
+	printf("cudaDeviceGetLimit wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(size_t *, enum cudaLimit);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaDeviceGetLimit");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(pValue, limit);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(size_t *, enum cudaLimit);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaDeviceGetLimit");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(pValue, limit);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
@@ -238,14 +239,14 @@ cudaThreadSetLimit(enum cudaLimit limit, size_t value) {
 }
 
 extern  __host__ cudaError_t CUDARTAPI
-		cudaThreadGetLimit(size_t *pValue, enum cudaLimit limit) {
+cudaThreadGetLimit(size_t *pValue, enum cudaLimit limit) {
 #ifdef TRACE_API_CALL
-printf("cudaThreadGetLimit wrapper called\n");
+	printf("cudaThreadGetLimit wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(size_t *, enum cudaLimit);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaThreadGetLimit");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(pValue, limit);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(size_t *, enum cudaLimit);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaThreadGetLimit");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(pValue, limit);
 }
 
 extern  __host__ cudaError_t CUDARTAPI
@@ -295,23 +296,23 @@ cudaPeekAtLastError(void) {
 extern __host__ __cudart_builtin__ const char *CUDARTAPI
 cudaGetErrorName(cudaError_t error) {
 #ifdef TRACE_API_CALL
-printf("cudaGetErrorName wrapper called\n");
+	printf("cudaGetErrorName wrapper called\n");
 #endif
-using FuncPtr = const char *(CUDARTAPI *)(cudaError_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaGetErrorName");
-if (!func_ptr) return "cudaGetErrorName symbol not found.";
-return func_ptr(error);
+	using FuncPtr = const char *(CUDARTAPI *)(cudaError_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaGetErrorName");
+	if (!func_ptr) return "cudaGetErrorName symbol not found.";
+	return func_ptr(error);
 }
 
 extern __host__ __cudart_builtin__ const char *CUDARTAPI
 cudaGetErrorString(cudaError_t error) {
 #ifdef TRACE_API_CALL
-printf("cudaGetErrorString wrapper called\n");
+	printf("cudaGetErrorString wrapper called\n");
 #endif
-using FuncPtr = const char *(CUDARTAPI *)(cudaError_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaGetErrorString");
-if (!func_ptr) return "cudaGetErrorString symbol not found.";
-return func_ptr(error);
+	using FuncPtr = const char *(CUDARTAPI *)(cudaError_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaGetErrorString");
+	if (!func_ptr) return "cudaGetErrorString symbol not found.";
+	return func_ptr(error);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
@@ -437,129 +438,129 @@ extern __host__ cudaError_t CUDARTAPI cudaStreamCreate(cudaStream_t *pStream) {
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaStreamCreateWithFlags(cudaStream_t *pStream, unsigned int flags) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamCreateWithFlags wrapper called\n");
+	printf("cudaStreamCreateWithFlags wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t *, unsigned int);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamCreateWithFlags");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(pStream, flags);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t *, unsigned int);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamCreateWithFlags");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(pStream, flags);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaStreamCreateWithPriority(cudaStream_t *pStream, unsigned int flags,
-int priority) {
+							 int priority) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamCreateWithPriority wrapper called\n");
+	printf("cudaStreamCreateWithPriority wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t *, unsigned int, int);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamCreateWithPriority");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(pStream, flags, priority);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t *, unsigned int, int);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamCreateWithPriority");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(pStream, flags, priority);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaStreamGetPriority(cudaStream_t hStream, int *priority) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamGetPriority wrapper called\n");
+	printf("cudaStreamGetPriority wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t, int *);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamGetPriority");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(hStream, priority);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t, int *);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamGetPriority");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(hStream, priority);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaStreamGetFlags(cudaStream_t hStream, unsigned int *flags) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamGetFlags wrapper called\n");
+	printf("cudaStreamGetFlags wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t, unsigned int *);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamGetFlags");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(hStream, flags);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t, unsigned int *);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamGetFlags");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(hStream, flags);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaStreamDestroy(cudaStream_t stream) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamDestroy wrapper called\n");
+	printf("cudaStreamDestroy wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamDestroy");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(stream);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamDestroy");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(stream);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI cudaStreamWaitEvent(
 		cudaStream_t stream, cudaEvent_t event, unsigned int flags) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamWaitEvent wrapper called\n");
+	printf("cudaStreamWaitEvent wrapper called\n");
 #endif
-using FuncPtr =
-cudaError_t(CUDARTAPI *)(cudaStream_t, cudaEvent_t, unsigned int);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamWaitEvent");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(stream, event, flags);
+	using FuncPtr =
+	cudaError_t(CUDARTAPI *)(cudaStream_t, cudaEvent_t, unsigned int);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamWaitEvent");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(stream, event, flags);
 }
 
 extern __host__ cudaError_t CUDARTAPI
-		cudaStreamAddCallback(cudaStream_t stream, cudaStreamCallback_t callback,
-void *userData, unsigned int flags) {
+cudaStreamAddCallback(cudaStream_t stream, cudaStreamCallback_t callback,
+					  void *userData, unsigned int flags) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamAddCallback wrapper called\n");
+	printf("cudaStreamAddCallback wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t, cudaStreamCallback_t,
-void *, unsigned int);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamAddCallback");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(stream, callback, userData, flags);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t, cudaStreamCallback_t,
+											 void *, unsigned int);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamAddCallback");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(stream, callback, userData, flags);
 }
 
 extern __host__ cudaError_t CUDARTAPI
-		cudaStreamSynchronize(cudaStream_t stream) {
+cudaStreamSynchronize(cudaStream_t stream) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamSynchronize wrapper called\n");
+	printf("cudaStreamSynchronize wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamSynchronize");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(stream);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamSynchronize");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(stream);
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaStreamQuery(cudaStream_t stream) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamQuery wrapper called\n");
+	printf("cudaStreamQuery wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamQuery");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(stream);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamQuery");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(stream);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaStreamAttachMemAsync(cudaStream_t stream, void *devPtr,
-		size_t length ,
-unsigned int flags) {
+						 size_t length,
+						 unsigned int flags) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamAttachMemAsync wrapper called\n");
+	printf("cudaStreamAttachMemAsync wrapper called\n");
 #endif
-using FuncPtr =
-cudaError_t(CUDARTAPI *)(cudaStream_t, void *, size_t, unsigned int);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamAttachMemAsync");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(stream, devPtr, length, flags);
+	using FuncPtr =
+	cudaError_t(CUDARTAPI *)(cudaStream_t, void *, size_t, unsigned int);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamAttachMemAsync");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(stream, devPtr, length, flags);
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaStreamIsCapturing(
 		cudaStream_t stream, enum cudaStreamCaptureStatus *pCaptureStatus) {
 #ifdef TRACE_API_CALL
-printf("cudaStreamIsCapturing wrapper called\n");
+	printf("cudaStreamIsCapturing wrapper called\n");
 #endif
-using FuncPtr =
-cudaError_t(CUDARTAPI *)(cudaStream_t, enum cudaStreamCaptureStatus *);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamIsCapturing");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(stream, pCaptureStatus);
+	using FuncPtr =
+	cudaError_t(CUDARTAPI *)(cudaStream_t, enum cudaStreamCaptureStatus *);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaStreamIsCapturing");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(stream, pCaptureStatus);
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaEventCreate(cudaEvent_t *event) {
@@ -575,54 +576,54 @@ extern __host__ cudaError_t CUDARTAPI cudaEventCreate(cudaEvent_t *event) {
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaEventCreateWithFlags(cudaEvent_t *event, unsigned int flags) {
 #ifdef TRACE_API_CALL
-printf("cudaEventCreateWithFlags wrapper called\n");
+	printf("cudaEventCreateWithFlags wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t *, unsigned int);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventCreateWithFlags");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(event, flags);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t *, unsigned int);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventCreateWithFlags");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(event, flags);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
-cudaEventRecord(cudaEvent_t event, cudaStream_t stream)  {
+cudaEventRecord(cudaEvent_t event, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
-printf("cudaEventRecord wrapper called\n");
+	printf("cudaEventRecord wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t, cudaStream_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventRecord");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(event, stream);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t, cudaStream_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventRecord");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(event, stream);
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaEventQuery(cudaEvent_t event) {
 #ifdef TRACE_API_CALL
-printf("cudaEventQuery wrapper called\n");
+	printf("cudaEventQuery wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventQuery");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(event);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventQuery");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(event);
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaEventSynchronize(cudaEvent_t event) {
 #ifdef TRACE_API_CALL
-printf("cudaEventSynchronize wrapper called\n");
+	printf("cudaEventSynchronize wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventSynchronize");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(event);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventSynchronize");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(event);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaEventDestroy(cudaEvent_t event) {
 #ifdef TRACE_API_CALL
-printf("cudaEventDestroy wrapper called\n");
+	printf("cudaEventDestroy wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventDestroy");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(event);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaEvent_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaEventDestroy");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(event);
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaEventElapsedTime(float *ms,
@@ -658,7 +659,7 @@ extern __host__ cudaError_t CUDARTAPI cudaExternalMemoryGetMappedBuffer(
 #endif
 	using FuncPtr =
 	cudaError_t(CUDARTAPI *)(void **, cudaExternalMemory_t,
-	const struct cudaExternalMemoryBufferDesc *);
+							 const struct cudaExternalMemoryBufferDesc *);
 	static auto func_ptr =
 			LoadSymbol<FuncPtr>("cudaExternalMemoryGetMappedBuffer");
 	if (!func_ptr) return GetSymbolNotFoundError();
@@ -673,7 +674,7 @@ extern __host__ cudaError_t CUDARTAPI cudaExternalMemoryGetMappedMipmappedArray(
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(
 			cudaMipmappedArray_t *, cudaExternalMemory_t,
-	const struct cudaExternalMemoryMipmappedArrayDesc *);
+			const struct cudaExternalMemoryMipmappedArrayDesc *);
 	static auto func_ptr =
 			LoadSymbol<FuncPtr>("cudaExternalMemoryGetMappedMipmappedArray");
 	if (!func_ptr) return GetSymbolNotFoundError();
@@ -699,7 +700,7 @@ extern __host__ cudaError_t CUDARTAPI cudaImportExternalSemaphore(
 #endif
 	using FuncPtr =
 	cudaError_t(CUDARTAPI *)(cudaExternalSemaphore_t *,
-	const struct cudaExternalSemaphoreHandleDesc *);
+							 const struct cudaExternalSemaphoreHandleDesc *);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaImportExternalSemaphore");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(extSem_out, semHandleDesc);
@@ -708,14 +709,14 @@ extern __host__ cudaError_t CUDARTAPI cudaImportExternalSemaphore(
 extern __host__ cudaError_t CUDARTAPI cudaSignalExternalSemaphoresAsync(
 		const cudaExternalSemaphore_t *extSemArray,
 		const struct cudaExternalSemaphoreSignalParams *paramsArray,
-		unsigned int numExtSems, cudaStream_t stream ) {
+		unsigned int numExtSems, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaSignalExternalSemaphoresAsync wrapper called\n");
 #endif
 	using FuncPtr =
 	cudaError_t(CUDARTAPI *)(const cudaExternalSemaphore_t *,
-	const struct cudaExternalSemaphoreSignalParams *,
-	unsigned int, cudaStream_t);
+							 const struct cudaExternalSemaphoreSignalParams *,
+							 unsigned int, cudaStream_t);
 	static auto func_ptr =
 			LoadSymbol<FuncPtr>("cudaSignalExternalSemaphoresAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
@@ -725,14 +726,14 @@ extern __host__ cudaError_t CUDARTAPI cudaSignalExternalSemaphoresAsync(
 extern __host__ cudaError_t CUDARTAPI cudaWaitExternalSemaphoresAsync(
 		const cudaExternalSemaphore_t *extSemArray,
 		const struct cudaExternalSemaphoreWaitParams *paramsArray,
-		unsigned int numExtSems, cudaStream_t stream ) {
+		unsigned int numExtSems, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaWaitExternalSemaphoresAsync wrapper called\n");
 #endif
 	using FuncPtr =
 	cudaError_t(CUDARTAPI *)(const cudaExternalSemaphore_t *,
-	const struct cudaExternalSemaphoreWaitParams *,
-	unsigned int, cudaStream_t);
+							 const struct cudaExternalSemaphoreWaitParams *,
+							 unsigned int, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaWaitExternalSemaphoresAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(extSemArray, paramsArray, numExtSems, stream);
@@ -756,7 +757,7 @@ cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args,
 	printf("cudaLaunchKernel wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(const void *, dim3, dim3, void **,
-			size_t, cudaStream_t);
+											 size_t, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaLaunchKernel");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(func, gridDim, blockDim, args, sharedMem, stream);
@@ -769,7 +770,7 @@ extern __host__ cudaError_t CUDARTAPI cudaLaunchCooperativeKernel(
 	printf("cudaLaunchCooperativeKernel wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(const void *, dim3, dim3, void **,
-			size_t, cudaStream_t);
+											 size_t, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaLaunchCooperativeKernel");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(func, gridDim, blockDim, args, sharedMem, stream);
@@ -777,12 +778,12 @@ extern __host__ cudaError_t CUDARTAPI cudaLaunchCooperativeKernel(
 
 extern __host__ cudaError_t CUDARTAPI cudaLaunchCooperativeKernelMultiDevice(
 		struct cudaLaunchParams *launchParamsList, unsigned int numDevices,
-		unsigned int flags ) {
+		unsigned int flags) {
 #ifdef TRACE_API_CALL
 	printf("cudaLaunchCooperativeKernelMultiDevice wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(struct cudaLaunchParams *,
-	unsigned int, unsigned int);
+											 unsigned int, unsigned int);
 	static auto func_ptr =
 			LoadSymbol<FuncPtr>("cudaLaunchCooperativeKernelMultiDevice");
 	if (!func_ptr) return GetSymbolNotFoundError();
@@ -859,15 +860,15 @@ cudaSetDoubleForHost(double *d) {
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaLaunchHostFunc(cudaStream_t stream,
-cudaHostFn_t fn,
-void *userData) {
+														 cudaHostFn_t fn,
+														 void *userData) {
 #ifdef TRACE_API_CALL
-printf("cudaLaunchHostFunc wrapper called\n");
+	printf("cudaLaunchHostFunc wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t, cudaHostFn_t, void *);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaLaunchHostFunc");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(stream, fn, userData);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaStream_t, cudaHostFn_t, void *);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaLaunchHostFunc");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(stream, fn, userData);
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
@@ -902,8 +903,8 @@ cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int *numBlocks,
 }
 
 extern __host__ cudaError_t CUDARTAPI
-cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem ,
-				  cudaStream_t stream ) {
+cudaConfigureCall(dim3 gridDim, dim3 blockDim, size_t sharedMem,
+				  cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaConfigureCall wrapper called\n");
 #endif
@@ -936,7 +937,7 @@ extern __host__ cudaError_t CUDARTAPI cudaLaunch(const void *func) {
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI cudaMallocManaged(
-		void **devPtr, size_t size, unsigned int flags ) {
+		void **devPtr, size_t size, unsigned int flags) {
 #ifdef TRACE_API_CALL
 	printf("cudaMallocManaged wrapper called\n");
 #endif
@@ -985,14 +986,14 @@ extern __host__ cudaError_t CUDARTAPI cudaMallocPitch(void **devPtr,
 
 extern __host__ cudaError_t CUDARTAPI cudaMallocArray(
 		cudaArray_t *array, const struct cudaChannelFormatDesc *desc, size_t width,
-		size_t height , unsigned int flags ) {
+		size_t height, unsigned int flags) {
 #ifdef TRACE_API_CALL
 	printf("cudaMallocArray wrapper called\n");
 	//system("touch /home/cptjack/cudaMallocArray");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaArray_t *,
-	const struct cudaChannelFormatDesc *,
-	size_t, size_t, unsigned int);
+											 const struct cudaChannelFormatDesc *,
+											 size_t, size_t, unsigned int);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMallocArray");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(array, desc, width, height, flags);
@@ -1109,13 +1110,13 @@ cudaMalloc3D(struct cudaPitchedPtr *pitchedDevPtr, struct cudaExtent extent) {
 
 extern __host__ cudaError_t CUDARTAPI
 cudaMalloc3DArray(cudaArray_t *array, const struct cudaChannelFormatDesc *desc,
-				  struct cudaExtent extent, unsigned int flags ) {
+				  struct cudaExtent extent, unsigned int flags) {
 #ifdef TRACE_API_CALL
 	printf("cudaMalloc3DArray wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaArray_t *,
-	const struct cudaChannelFormatDesc *,
-	struct cudaExtent, unsigned int);
+											 const struct cudaChannelFormatDesc *,
+											 struct cudaExtent, unsigned int);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMalloc3DArray");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(array, desc, extent, flags);
@@ -1124,14 +1125,14 @@ cudaMalloc3DArray(cudaArray_t *array, const struct cudaChannelFormatDesc *desc,
 extern __host__ cudaError_t CUDARTAPI cudaMallocMipmappedArray(
 		cudaMipmappedArray_t *mipmappedArray,
 		const struct cudaChannelFormatDesc *desc, struct cudaExtent extent,
-		unsigned int numLevels, unsigned int flags ) {
+		unsigned int numLevels, unsigned int flags) {
 #ifdef TRACE_API_CALL
 	printf("cudaMallocMipmappedArray wrapper called\n");
 	//system("touch /home/cptjack/cudaMallocMipMappedArray");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(
 			cudaMipmappedArray_t *, const struct cudaChannelFormatDesc *,
-	struct cudaExtent, unsigned int, unsigned int);
+			struct cudaExtent, unsigned int, unsigned int);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMallocMipmappedArray");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(mipmappedArray, desc, extent, numLevels, flags);
@@ -1174,7 +1175,7 @@ cudaMemcpy3DPeer(const struct cudaMemcpy3DPeerParms *p) {
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI cudaMemcpy3DAsync(
-		const struct cudaMemcpy3DParms *p, cudaStream_t stream ) {
+		const struct cudaMemcpy3DParms *p, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpy3DAsync wrapper called\n");
 #endif
@@ -1186,12 +1187,12 @@ extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI cudaMemcpy3DAsync(
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaMemcpy3DPeerAsync(
-		const struct cudaMemcpy3DPeerParms *p, cudaStream_t stream ) {
+		const struct cudaMemcpy3DPeerParms *p, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpy3DPeerAsync wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(const struct cudaMemcpy3DPeerParms *,
-	cudaStream_t);
+											 cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpy3DPeerAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(p, stream);
@@ -1215,8 +1216,8 @@ cudaArrayGetInfo(struct cudaChannelFormatDesc *desc, struct cudaExtent *extent,
 	printf("cudaArrayGetInfo wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(struct cudaChannelFormatDesc *,
-	struct cudaExtent *, unsigned int *,
-	cudaArray_t);
+											 struct cudaExtent *, unsigned int *,
+											 cudaArray_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaArrayGetInfo");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(desc, extent, flags, array);
@@ -1229,7 +1230,7 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpy(void *dst, const void *src,
 	printf("cudaMemcpy wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(void *, const void *, size_t,
-	enum cudaMemcpyKind);
+											 enum cudaMemcpyKind);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpy");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, src, count, kind);
@@ -1278,7 +1279,7 @@ cudaMemcpyFromArray(void *dst, cudaArray_const_t src, size_t wOffset,
 extern __host__ cudaError_t CUDARTAPI cudaMemcpyArrayToArray(
 		cudaArray_t dst, size_t wOffsetDst, size_t hOffsetDst,
 		cudaArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t count,
-		enum cudaMemcpyKind kind ) {
+		enum cudaMemcpyKind kind) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpyArrayToArray wrapper called\n");
 #endif
@@ -1300,7 +1301,7 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpy2D(void *dst, size_t dpitch,
 	printf("cudaMemcpy2D wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(void *, size_t, const void *, size_t,
-			size_t, size_t, enum cudaMemcpyKind);
+											 size_t, size_t, enum cudaMemcpyKind);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpy2D");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, dpitch, src, spitch, width, height, kind);
@@ -1314,7 +1315,7 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpy2DToArray(
 #endif
 	using FuncPtr =
 	cudaError_t(CUDARTAPI *)(cudaArray_t, size_t, size_t, const void *,
-	size_t, size_t, size_t, enum cudaMemcpyKind);
+							 size_t, size_t, size_t, enum cudaMemcpyKind);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpy2DToArray");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, wOffset, hOffset, src, spitch, width, height, kind);
@@ -1337,7 +1338,7 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpy2DFromArray(
 extern __host__ cudaError_t CUDARTAPI cudaMemcpy2DArrayToArray(
 		cudaArray_t dst, size_t wOffsetDst, size_t hOffsetDst,
 		cudaArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width,
-		size_t height, enum cudaMemcpyKind kind ) {
+		size_t height, enum cudaMemcpyKind kind) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpy2DArrayToArray wrapper called\n");
 #endif
@@ -1351,26 +1352,26 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpy2DArrayToArray(
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaMemcpyToSymbol(
-		const void *symbol, const void *src, size_t count, size_t offset ,
-		enum cudaMemcpyKind kind ) {
+		const void *symbol, const void *src, size_t count, size_t offset,
+		enum cudaMemcpyKind kind) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpyToSymbol wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(const void *, const void *, size_t,
-			size_t, enum cudaMemcpyKind);
+											 size_t, enum cudaMemcpyKind);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpyToSymbol");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(symbol, src, count, offset, kind);
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaMemcpyFromSymbol(
-		void *dst, const void *symbol, size_t count, size_t offset ,
-		enum cudaMemcpyKind kind ) {
+		void *dst, const void *symbol, size_t count, size_t offset,
+		enum cudaMemcpyKind kind) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpyFromSymbol wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(void *, const void *, size_t, size_t,
-	enum cudaMemcpyKind);
+											 enum cudaMemcpyKind);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpyFromSymbol");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, symbol, count, offset, kind);
@@ -1378,12 +1379,12 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpyFromSymbol(
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaMemcpyAsync(void *dst, const void *src, size_t count,
-				enum cudaMemcpyKind kind, cudaStream_t stream ) {
+				enum cudaMemcpyKind kind, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpyAsync wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(void *, const void *, size_t,
-	enum cudaMemcpyKind, cudaStream_t);
+											 enum cudaMemcpyKind, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpyAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, src, count, kind, stream);
@@ -1391,12 +1392,12 @@ cudaMemcpyAsync(void *dst, const void *src, size_t count,
 
 extern __host__ cudaError_t CUDARTAPI
 cudaMemcpyPeerAsync(void *dst, int dstDevice, const void *src, int srcDevice,
-					size_t count, cudaStream_t stream ) {
+					size_t count, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpyPeerAsync wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(void *, int, const void *, int,
-			size_t, cudaStream_t);
+											 size_t, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpyPeerAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, dstDevice, src, srcDevice, count, stream);
@@ -1404,13 +1405,13 @@ cudaMemcpyPeerAsync(void *dst, int dstDevice, const void *src, int srcDevice,
 
 extern __host__ cudaError_t CUDARTAPI cudaMemcpyToArrayAsync(
 		cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src,
-		size_t count, enum cudaMemcpyKind kind, cudaStream_t stream ) {
+		size_t count, enum cudaMemcpyKind kind, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpyToArrayAsync wrapper called\n");
 #endif
 	using FuncPtr =
 	cudaError_t(CUDARTAPI *)(cudaArray_t, size_t, size_t, const void *,
-	size_t, enum cudaMemcpyKind, cudaStream_t);
+							 size_t, enum cudaMemcpyKind, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpyToArrayAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, wOffset, hOffset, src, count, kind, stream);
@@ -1418,7 +1419,7 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpyToArrayAsync(
 
 extern __host__ cudaError_t CUDARTAPI cudaMemcpyFromArrayAsync(
 		void *dst, cudaArray_const_t src, size_t wOffset, size_t hOffset,
-		size_t count, enum cudaMemcpyKind kind, cudaStream_t stream ) {
+		size_t count, enum cudaMemcpyKind kind, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpyFromArrayAsync wrapper called\n");
 #endif
@@ -1432,13 +1433,13 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpyFromArrayAsync(
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI cudaMemcpy2DAsync(
 		void *dst, size_t dpitch, const void *src, size_t spitch, size_t width,
-		size_t height, enum cudaMemcpyKind kind, cudaStream_t stream ) {
+		size_t height, enum cudaMemcpyKind kind, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpy2DAsync wrapper called\n");
 #endif
 	using FuncPtr =
 	cudaError_t(CUDARTAPI *)(void *, size_t, const void *, size_t, size_t,
-			size_t, enum cudaMemcpyKind, cudaStream_t);
+							 size_t, enum cudaMemcpyKind, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpy2DAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, dpitch, src, spitch, width, height, kind, stream);
@@ -1447,13 +1448,13 @@ extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI cudaMemcpy2DAsync(
 extern __host__ cudaError_t CUDARTAPI cudaMemcpy2DToArrayAsync(
 		cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src,
 		size_t spitch, size_t width, size_t height, enum cudaMemcpyKind kind,
-		cudaStream_t stream ) {
+		cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpy2DToArrayAsync wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaArray_t, size_t, size_t,
-	const void *, size_t, size_t, size_t,
-	enum cudaMemcpyKind, cudaStream_t);
+											 const void *, size_t, size_t, size_t,
+											 enum cudaMemcpyKind, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpy2DToArrayAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, wOffset, hOffset, src, spitch, width, height, kind,
@@ -1463,13 +1464,13 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpy2DToArrayAsync(
 extern __host__ cudaError_t CUDARTAPI cudaMemcpy2DFromArrayAsync(
 		void *dst, size_t dpitch, cudaArray_const_t src, size_t wOffset,
 		size_t hOffset, size_t width, size_t height, enum cudaMemcpyKind kind,
-		cudaStream_t stream ) {
+		cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpy2DFromArrayAsync wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(void *, size_t, cudaArray_const_t,
 											 size_t, size_t, size_t, size_t,
-	enum cudaMemcpyKind, cudaStream_t);
+											 enum cudaMemcpyKind, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpy2DFromArrayAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, dpitch, src, wOffset, hOffset, width, height, kind,
@@ -1478,13 +1479,13 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpy2DFromArrayAsync(
 
 extern __host__ cudaError_t CUDARTAPI cudaMemcpyToSymbolAsync(
 		const void *symbol, const void *src, size_t count, size_t offset,
-		enum cudaMemcpyKind kind, cudaStream_t stream ) {
+		enum cudaMemcpyKind kind, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpyToSymbolAsync wrapper called\n");
 #endif
 	using FuncPtr =
 	cudaError_t(CUDARTAPI *)(const void *, const void *, size_t, size_t,
-	enum cudaMemcpyKind, cudaStream_t);
+							 enum cudaMemcpyKind, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpyToSymbolAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(symbol, src, count, offset, kind, stream);
@@ -1492,12 +1493,12 @@ extern __host__ cudaError_t CUDARTAPI cudaMemcpyToSymbolAsync(
 
 extern __host__ cudaError_t CUDARTAPI cudaMemcpyFromSymbolAsync(
 		void *dst, const void *symbol, size_t count, size_t offset,
-		enum cudaMemcpyKind kind, cudaStream_t stream ) {
+		enum cudaMemcpyKind kind, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemcpyFromSymbolAsync wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(void *, const void *, size_t, size_t,
-	enum cudaMemcpyKind, cudaStream_t);
+											 enum cudaMemcpyKind, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemcpyFromSymbolAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(dst, symbol, count, offset, kind, stream);
@@ -1539,7 +1540,7 @@ extern __host__ cudaError_t CUDARTAPI cudaMemset3D(
 }
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI cudaMemsetAsync(
-		void *devPtr, int value, size_t count, cudaStream_t stream ) {
+		void *devPtr, int value, size_t count, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemsetAsync wrapper called\n");
 #endif
@@ -1551,7 +1552,7 @@ extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI cudaMemsetAsync(
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaMemset2DAsync(void *devPtr, size_t pitch, int value, size_t width,
-				  size_t height, cudaStream_t stream ) {
+				  size_t height, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemset2DAsync wrapper called\n");
 #endif
@@ -1564,12 +1565,12 @@ cudaMemset2DAsync(void *devPtr, size_t pitch, int value, size_t width,
 
 extern __host__ __cudart_builtin__ cudaError_t CUDARTAPI
 cudaMemset3DAsync(struct cudaPitchedPtr pitchedDevPtr, int value,
-				  struct cudaExtent extent, cudaStream_t stream ) {
+				  struct cudaExtent extent, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemset3DAsync wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(struct cudaPitchedPtr, int,
-	struct cudaExtent, cudaStream_t);
+											 struct cudaExtent, cudaStream_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemset3DAsync");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(pitchedDevPtr, value, extent, stream);
@@ -1587,19 +1588,19 @@ extern __host__ cudaError_t CUDARTAPI cudaGetSymbolAddress(void **devPtr,
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaGetSymbolSize(size_t *size,
-const void *symbol) {
+														const void *symbol) {
 #ifdef TRACE_API_CALL
-printf("cudaGetSymbolSize wrapper called\n");
+	printf("cudaGetSymbolSize wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(size_t *, const void *);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaGetSymbolSize");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(size, symbol);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(size_t *, const void *);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaGetSymbolSize");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(size, symbol);
 }
 
 extern __host__ cudaError_t CUDARTAPI
 cudaMemPrefetchAsync(const void *devPtr, size_t count, int dstDevice,
-					 cudaStream_t stream ) {
+					 cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaMemPrefetchAsync wrapper called\n");
 #endif
@@ -1617,7 +1618,7 @@ cudaMemAdvise(const void *devPtr, size_t count, enum cudaMemoryAdvise advice,
 	printf("cudaMemAdvise wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(const void *, size_t,
-	enum cudaMemoryAdvise, int);
+											 enum cudaMemoryAdvise, int);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemAdvise");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(devPtr, count, advice, device);
@@ -1644,7 +1645,7 @@ extern __host__ cudaError_t CUDARTAPI cudaMemRangeGetAttributes(
 #endif
 	using FuncPtr =
 	cudaError_t(CUDARTAPI *)(void **, size_t *, enum cudaMemRangeAttribute *,
-	size_t, const void *, size_t);
+							 size_t, const void *, size_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaMemRangeGetAttributes");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(data, dataSizes, attributes, numAttributes, devPtr, count);
@@ -1719,7 +1720,7 @@ extern __host__ cudaError_t CUDARTAPI cudaGraphicsResourceSetMapFlags(
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaGraphicsMapResources(
-		int count, cudaGraphicsResource_t *resources, cudaStream_t stream ) {
+		int count, cudaGraphicsResource_t *resources, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaGraphicsMapResources wrapper called\n");
 #endif
@@ -1731,7 +1732,7 @@ extern __host__ cudaError_t CUDARTAPI cudaGraphicsMapResources(
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaGraphicsUnmapResources(
-		int count, cudaGraphicsResource_t *resources, cudaStream_t stream ) {
+		int count, cudaGraphicsResource_t *resources, cudaStream_t stream) {
 #ifdef TRACE_API_CALL
 	printf("cudaGraphicsUnmapResources wrapper called\n");
 #endif
@@ -1789,7 +1790,7 @@ extern __host__ cudaError_t CUDARTAPI cudaGetChannelDesc(
 	printf("cudaGetChannelDesc wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(struct cudaChannelFormatDesc *,
-	cudaArray_const_t);
+											 cudaArray_const_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaGetChannelDesc");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(desc, array);
@@ -1797,31 +1798,31 @@ extern __host__ cudaError_t CUDARTAPI cudaGetChannelDesc(
 
 extern __host__ cudaError_t CUDARTAPI cudaBindTexture(
 		size_t *offset, const struct textureReference *texref, const void *devPtr,
-const struct cudaChannelFormatDesc *desc, size_t size ) {
+		const struct cudaChannelFormatDesc *desc, size_t size) {
 #ifdef TRACE_API_CALL
-printf("cudaBindTexture wrapper called\n");
+	printf("cudaBindTexture wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(
-size_t *, const struct textureReference *, const void *,
-const struct cudaChannelFormatDesc *, size_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaBindTexture");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(offset, texref, devPtr, desc, size);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(
+			size_t *, const struct textureReference *, const void *,
+			const struct cudaChannelFormatDesc *, size_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaBindTexture");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(offset, texref, devPtr, desc, size);
 }
 
 extern __host__ cudaError_t CUDARTAPI
-		cudaBindTexture2D(size_t *offset, const struct textureReference *texref,
-const void *devPtr, const struct cudaChannelFormatDesc *desc,
-		size_t width, size_t height, size_t pitch) {
+cudaBindTexture2D(size_t *offset, const struct textureReference *texref,
+				  const void *devPtr, const struct cudaChannelFormatDesc *desc,
+				  size_t width, size_t height, size_t pitch) {
 #ifdef TRACE_API_CALL
-printf("cudaBindTexture2D wrapper called\n");
+	printf("cudaBindTexture2D wrapper called\n");
 #endif
-using FuncPtr = cudaError_t(CUDARTAPI *)(
-size_t *, const struct textureReference *, const void *,
-const struct cudaChannelFormatDesc *, size_t, size_t, size_t);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaBindTexture2D");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(offset, texref, devPtr, desc, width, height, pitch);
+	using FuncPtr = cudaError_t(CUDARTAPI *)(
+			size_t *, const struct textureReference *, const void *,
+			const struct cudaChannelFormatDesc *, size_t, size_t, size_t);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaBindTexture2D");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(offset, texref, devPtr, desc, width, height, pitch);
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaBindTextureToArray(
@@ -1831,8 +1832,8 @@ extern __host__ cudaError_t CUDARTAPI cudaBindTextureToArray(
 	printf("cudaBindTextureToArray wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(
-	const struct textureReference *, cudaArray_const_t,
-	const struct cudaChannelFormatDesc *);
+			const struct textureReference *, cudaArray_const_t,
+			const struct cudaChannelFormatDesc *);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaBindTextureToArray");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(texref, array, desc);
@@ -1846,8 +1847,8 @@ cudaBindTextureToMipmappedArray(const struct textureReference *texref,
 	printf("cudaBindTextureToMipmappedArray wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(
-	const struct textureReference *, cudaMipmappedArray_const_t,
-	const struct cudaChannelFormatDesc *);
+			const struct textureReference *, cudaMipmappedArray_const_t,
+			const struct cudaChannelFormatDesc *);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaBindTextureToMipmappedArray");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(texref, mipmappedArray, desc);
@@ -1867,13 +1868,13 @@ cudaUnbindTexture(const struct textureReference *texref) {
 extern __host__ cudaError_t CUDARTAPI cudaGetTextureAlignmentOffset(
 		size_t *offset, const struct textureReference *texref) {
 #ifdef TRACE_API_CALL
-printf("cudaGetTextureAlignmentOffset wrapper called\n");
+	printf("cudaGetTextureAlignmentOffset wrapper called\n");
 #endif
-using FuncPtr =
-cudaError_t(CUDARTAPI *)(size_t *, const struct textureReference *);
-static auto func_ptr = LoadSymbol<FuncPtr>("cudaGetTextureAlignmentOffset");
-if (!func_ptr) return GetSymbolNotFoundError();
-return func_ptr(offset, texref);
+	using FuncPtr =
+	cudaError_t(CUDARTAPI *)(size_t *, const struct textureReference *);
+	static auto func_ptr = LoadSymbol<FuncPtr>("cudaGetTextureAlignmentOffset");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(offset, texref);
 }
 
 extern __host__ cudaError_t CUDARTAPI cudaGetTextureReference(
@@ -1895,8 +1896,8 @@ extern __host__ cudaError_t CUDARTAPI cudaBindSurfaceToArray(
 	printf("cudaBindSurfaceToArray wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(
-	const struct surfaceReference *, cudaArray_const_t,
-	const struct cudaChannelFormatDesc *);
+			const struct surfaceReference *, cudaArray_const_t,
+			const struct cudaChannelFormatDesc *);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaBindSurfaceToArray");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(surfref, array, desc);
@@ -1923,7 +1924,7 @@ extern __host__ cudaError_t CUDARTAPI cudaCreateTextureObject(
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(
 			cudaTextureObject_t *, const struct cudaResourceDesc *,
-	const struct cudaTextureDesc *, const struct cudaResourceViewDesc *);
+			const struct cudaTextureDesc *, const struct cudaResourceViewDesc *);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaCreateTextureObject");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(pTexObject, pResDesc, pTexDesc, pResViewDesc);
@@ -1971,7 +1972,7 @@ extern __host__ cudaError_t CUDARTAPI cudaGetTextureObjectResourceViewDesc(
 	printf("cudaGetTextureObjectResourceViewDesc wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(struct cudaResourceViewDesc *,
-	cudaTextureObject_t);
+											 cudaTextureObject_t);
 	static auto func_ptr =
 			LoadSymbol<FuncPtr>("cudaGetTextureObjectResourceViewDesc");
 	if (!func_ptr) return GetSymbolNotFoundError();
@@ -1984,7 +1985,7 @@ extern __host__ cudaError_t CUDARTAPI cudaCreateSurfaceObject(
 	printf("cudaCreateSurfaceObject wrapper called\n");
 #endif
 	using FuncPtr = cudaError_t(CUDARTAPI *)(cudaSurfaceObject_t *,
-	const struct cudaResourceDesc *);
+											 const struct cudaResourceDesc *);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cudaCreateSurfaceObject");
 	if (!func_ptr) return GetSymbolNotFoundError();
 	return func_ptr(pSurfObject, pResDesc);
@@ -2055,85 +2056,86 @@ extern "C" {
 extern void CUDARTAPI __cudaInitModule() {
 #ifdef TRACE_API_CALL
 	printf("cudaInitModule wrapper called\n");
-#endif}
-
-	extern void CUDARTAPI __cudaRegisterFunction(
-			void **fatCubinHandle, const char *hostFun, char *deviceFun,
-	const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid,
-			dim3 *bDim, dim3 *gDim, int *wSize) {
-#ifdef TRACE_API_CALL
-		printf("cudaRegisterFunction wrapper called\n");
 #endif
-		using FuncPtr = void(CUDARTAPI *)(void **fatCubinHandle, const char *hostFun,
-		char *deviceFun, const char *deviceName,
-		int thread_limit, uint3 *tid, uint3 *bid,
-				dim3 *bDim, dim3 *gDim, int *wSize);
-		static auto func_ptr = LoadSymbol<FuncPtr>("__cudaRegisterFunction");
-		if (!func_ptr) return;
-		func_ptr(fatCubinHandle, hostFun, deviceFun, deviceName, thread_limit, tid,
-				 bid, bDim, gDim, wSize);
-	}
+}
 
-	extern void CUDARTAPI __cudaUnregisterFatBinary(void **fatCubinHandle) {
+extern void CUDARTAPI __cudaRegisterFunction(
+		void **fatCubinHandle, const char *hostFun, char *deviceFun,
+		const char *deviceName, int thread_limit, uint3 *tid, uint3 *bid,
+		dim3 *bDim, dim3 *gDim, int *wSize) {
 #ifdef TRACE_API_CALL
-		printf("cudaUnregisterFatBinary wrapper called\n");
+	printf("cudaRegisterFunction wrapper called\n");
 #endif
-		using FuncPtr = void(CUDARTAPI *)(void **fatCubinHandle);
-		static auto func_ptr = LoadSymbol<FuncPtr>("__cudaUnregisterFatBinary");
-		if (!func_ptr) return;
-		func_ptr(fatCubinHandle);
-	}
+	using FuncPtr = void (CUDARTAPI *)(void **fatCubinHandle, const char *hostFun,
+									   char *deviceFun, const char *deviceName,
+									   int thread_limit, uint3 *tid, uint3 *bid,
+									   dim3 *bDim, dim3 *gDim, int *wSize);
+	static auto func_ptr = LoadSymbol<FuncPtr>("__cudaRegisterFunction");
+	if (!func_ptr) return;
+	func_ptr(fatCubinHandle, hostFun, deviceFun, deviceName, thread_limit, tid,
+			 bid, bDim, gDim, wSize);
+}
 
-	extern void CUDARTAPI __cudaRegisterVar(void **fatCubinHandle, char *hostVar,
-											char *deviceAddress,
-	const char *deviceName, int ext,
-	size_t size, int constant, int global) {
+extern void CUDARTAPI __cudaUnregisterFatBinary(void **fatCubinHandle) {
 #ifdef TRACE_API_CALL
-		printf("cudaRegisterVar wrapper called\n");
+	printf("cudaUnregisterFatBinary wrapper called\n");
 #endif
-		using FuncPtr = void(CUDARTAPI *)(
-				void **fatCubinHandle, char *hostVar, char *deviceAddress,
-		const char *deviceName, int ext, size_t size, int constant, int global);
-		static auto func_ptr = LoadSymbol<FuncPtr>("__cudaRegisterVar");
-		if (!func_ptr) return;
-		func_ptr(fatCubinHandle, hostVar, deviceAddress, deviceName, ext, size,
-				 constant, global);
-	}
+	using FuncPtr = void (CUDARTAPI *)(void **fatCubinHandle);
+	static auto func_ptr = LoadSymbol<FuncPtr>("__cudaUnregisterFatBinary");
+	if (!func_ptr) return;
+	func_ptr(fatCubinHandle);
+}
 
-	extern void **CUDARTAPI __cudaRegisterFatBinary(void *fatCubin) {
+extern void CUDARTAPI __cudaRegisterVar(void **fatCubinHandle, char *hostVar,
+										char *deviceAddress,
+										const char *deviceName, int ext,
+										size_t size, int constant, int global) {
 #ifdef TRACE_API_CALL
-		printf("cudaRegisterFatBinary wrapper called\n");
+	printf("cudaRegisterVar wrapper called\n");
 #endif
-		using FuncPtr = void **(CUDARTAPI *)(void *fatCubin);
-		static auto func_ptr = LoadSymbol<FuncPtr>("__cudaRegisterFatBinary");
-		if (!func_ptr) return nullptr;
-		return (void **)func_ptr(fatCubin);
-	}
+	using FuncPtr = void (CUDARTAPI *)(
+			void **fatCubinHandle, char *hostVar, char *deviceAddress,
+			const char *deviceName, int ext, size_t size, int constant, int global);
+	static auto func_ptr = LoadSymbol<FuncPtr>("__cudaRegisterVar");
+	if (!func_ptr) return;
+	func_ptr(fatCubinHandle, hostVar, deviceAddress, deviceName, ext, size,
+			 constant, global);
+}
 
-	extern cudaError_t CUDARTAPI __cudaPopCallConfiguration(dim3 *gridDim,
-															dim3 *blockDim,
-															size_t *sharedMem,
-															void *stream) {
+extern void **CUDARTAPI __cudaRegisterFatBinary(void *fatCubin) {
 #ifdef TRACE_API_CALL
-		printf("cudaPopCallConfiguration wrapper called\n");
+	printf("cudaRegisterFatBinary wrapper called\n");
 #endif
-		using FuncPtr = cudaError_t(CUDARTAPI *)(dim3 * gridDim, dim3 * blockDim,
-												 size_t * sharedMem, void *stream);
-		static auto func_ptr = LoadSymbol<FuncPtr>("__cudaPopCallConfiguration");
-		if (!func_ptr) return GetSymbolNotFoundError();
-		return func_ptr(gridDim, blockDim, sharedMem, stream);
-	}
+	using FuncPtr = void **(CUDARTAPI *)(void *fatCubin);
+	static auto func_ptr = LoadSymbol<FuncPtr>("__cudaRegisterFatBinary");
+	if (!func_ptr) return nullptr;
+	return (void **) func_ptr(fatCubin);
+}
 
-	extern __host__ __device__ unsigned CUDARTAPI __cudaPushCallConfiguration(
-			dim3 gridDim, dim3 blockDim, size_t sharedMem = 0, void *stream = 0) {
+extern cudaError_t CUDARTAPI __cudaPopCallConfiguration(dim3 *gridDim,
+														dim3 *blockDim,
+														size_t *sharedMem,
+														void *stream) {
 #ifdef TRACE_API_CALL
-		printf("cudaPushCallConfiguration wrapper called\n");
+	printf("cudaPopCallConfiguration wrapper called\n");
 #endif
-		using FuncPtr = unsigned(CUDARTAPI *)(dim3 gridDim, dim3 blockDim,
-				size_t sharedMem, void *stream);
-		static auto func_ptr = LoadSymbol<FuncPtr>("__cudaPushCallConfiguration");
-		if (!func_ptr) return 0;
-		return func_ptr(gridDim, blockDim, sharedMem, stream);
-	}
+	using FuncPtr = cudaError_t(CUDARTAPI *)(dim3 *gridDim, dim3 *blockDim,
+											 size_t *sharedMem, void *stream);
+	static auto func_ptr = LoadSymbol<FuncPtr>("__cudaPopCallConfiguration");
+	if (!func_ptr) return GetSymbolNotFoundError();
+	return func_ptr(gridDim, blockDim, sharedMem, stream);
+}
+
+extern __host__ __device__ unsigned CUDARTAPI __cudaPushCallConfiguration(
+		dim3 gridDim, dim3 blockDim, size_t sharedMem = 0, void *stream = 0) {
+#ifdef TRACE_API_CALL
+	printf("cudaPushCallConfiguration wrapper called\n");
+#endif
+	using FuncPtr = unsigned (CUDARTAPI *)(dim3 gridDim, dim3 blockDim,
+										   size_t sharedMem, void *stream);
+	static auto func_ptr = LoadSymbol<FuncPtr>("__cudaPushCallConfiguration");
+	if (!func_ptr) return 0;
+	return func_ptr(gridDim, blockDim, sharedMem, stream);
+}
 
 }  // extern "C"

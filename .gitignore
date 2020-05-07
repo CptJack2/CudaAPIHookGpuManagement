@@ -3,3 +3,4 @@ cmake-build-debug/
 main*
 saxpy
 cudadev100_stub.cpp.bak
+cudart100_stub.cpp.bak

@@ -10,7 +10,7 @@ def add_trace_api(matched):
 #endif'''
 
 def libcuda_addtrace():
-    f=open(os.path.dirname(os.path.abspath(__file__))+"/cudadev100_stub.cpp.bak")
+    f=open(os.path.dirname(os.path.abspath(__file__))+"/cudadev100_stub.cpp")
     code=f.read()
     res=re.sub(r"(__)?(?P<funcn>cu[A-Z][A-Za-z0-9]*)\([\s\S]*?\{",add_trace_api,code)
     #print(res)
@@ -18,7 +18,7 @@ def libcuda_addtrace():
         f2.write(res)
 
 def libcudart_addtrace():
-    f=open(os.path.dirname(os.path.abspath(__file__))+"/cudart100_stub.cpp.bak")
+    f=open(os.path.dirname(os.path.abspath(__file__))+"/cudart100_stub.cpp")
     code=f.read()
     res=re.sub(r"(__)?(?P<funcn>cuda[A-Z][A-Za-z0-9]*)\([\s\S]*?\{",add_trace_api,code)
     #print(res)
