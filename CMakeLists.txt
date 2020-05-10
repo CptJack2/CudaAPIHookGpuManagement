@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
+SET(CMAKE_BUILD_TYPE "Debug")
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 INCLUDE_DIRECTORIES(/usr/local/cuda/include include)
 link_directories(/usr/local/cuda/lib64/stub)
@@ -14,10 +17,10 @@ set_target_properties(cuda PROPERTIES VERSION 1)
 #add_executable(testcudart testcudart.cpp)
 #target_link_libraries(testcudart cudart)
 add_custom_target(testcudart
-        COMMAND nvcc --cudart=shared -o testcudart ../saxpy.cu)
+        COMMAND nvcc -g --cudart=shared -o testcudart ../saxpy.cu)
 
 add_executable(testcudadev drivertest.cpp)
 target_link_libraries(testcudadev -lcuda)#/usr/local/cuda/lib64/stub/libcuda.so)
 ADD_CUSTOM_COMMAND(TARGET testcudadev
-        COMMAND nvcc --ptx -o matSumKernel.ptx ../matSumKernel.cu)
+        COMMAND nvcc -g --ptx -o matSumKernel.ptx ../matSumKernel.cu)
 #nvcc --ptx -o matSumKernel.ptx ../matSumKernel.cu
