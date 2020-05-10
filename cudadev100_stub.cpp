@@ -7,7 +7,7 @@
 
 static void *cudadev_handle = nullptr;
 
-void LoadLibrary() {
+static void LoadLibrary() {
 	cudadev_handle = dlopen("/usr/lib/x86_64-linux-gnu/libcuda.so.1.orig", RTLD_NOW | RTLD_LOCAL);
 	if (!cudadev_handle) {
 		printf("original libcuda.so.1 not found, exiting\n");
@@ -16,7 +16,7 @@ void LoadLibrary() {
 }
 
 template<typename T>
-T LoadSymbol(const char *symbol_name) {
+static T LoadSymbol(const char *symbol_name) {
 	if (!cudadev_handle) LoadLibrary();
 	void *symbol = dlsym(cudadev_handle, symbol_name);
 	return reinterpret_cast<T>(symbol);

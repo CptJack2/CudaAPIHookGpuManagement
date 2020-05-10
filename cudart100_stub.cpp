@@ -7,7 +7,7 @@
 
 static void *cudart_handle = nullptr;
 
-void LoadLibrary() {
+static void LoadLibrary() {
 	cudart_handle = dlopen("/usr/local/cuda/lib64/libcudart.so.10.0.orig", RTLD_NOW | RTLD_LOCAL);
 	if (!cudart_handle) {
 		printf("original libcudart.so not found, exiting\n");
@@ -16,7 +16,7 @@ void LoadLibrary() {
 }
 
 template<typename T>
-T LoadSymbol(const char *symbol_name) {
+static T LoadSymbol(const char *symbol_name) {
 	if (!cudart_handle) LoadLibrary();
 	void *symbol = dlsym(cudart_handle, symbol_name);
 	return reinterpret_cast<T>(symbol);
