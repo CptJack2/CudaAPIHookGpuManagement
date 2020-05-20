@@ -97,11 +97,11 @@ typedef uint64_t cuuint64_t;
     #define cuCtxCreate                         cuCtxCreate_v2
     #define cuModuleGetGlobal                   cuModuleGetGlobal_v2
     #define cuMemGetInfo                        cuMemGetInfo_v2
-    #define cuMemAlloc                          cuMemAlloc_v2
-    #define cuMemAllocPitch                     cuMemAllocPitch_v2
+    //#define cuMemAlloc                          cuMemAlloc_v2
+    //#define cuMemAllocPitch                     cuMemAllocPitch_v2
     #define cuMemFree                           cuMemFree_v2
     #define cuMemGetAddressRange                cuMemGetAddressRange_v2
-    #define cuMemAllocHost                      cuMemAllocHost_v2
+    //#define cuMemAllocHost                      cuMemAllocHost_v2
     #define cuMemHostGetDevicePointer           cuMemHostGetDevicePointer_v2
     #define cuMemcpyHtoD                        __CUDA_API_PTDS(cuMemcpyHtoD_v2)
     #define cuMemcpyDtoH                        __CUDA_API_PTDS(cuMemcpyDtoH_v2)
