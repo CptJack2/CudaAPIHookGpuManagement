@@ -9,7 +9,7 @@ using namespace std;
 #define TRACE_API_CALL
 
 static void *cudadev_handle = nullptr;
-static size_t gmem_visible=3*1024*1024*1024;
+static size_t gmem_visible=3ul*1024*1024*1024;
 static size_t gmem_used=0;
 static map<CUdeviceptr,size_t> ptr_usage;
 
