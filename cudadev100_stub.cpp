@@ -6,6 +6,8 @@
 #define TRACE_API_CALL
 
 static void *cudadev_handle = nullptr;
+static size_t gmem_visible=3*1024*1024*1024;
+static size_t gmem_used=0;
 
 static void LoadLibrary() {
 	cudadev_handle = dlopen("/usr/lib/x86_64-linux-gnu/libcuda.so.1.orig", RTLD_NOW | RTLD_LOCAL);
@@ -159,7 +161,12 @@ CUresult CUDAAPI cuDeviceTotalMem(size_t *bytes, CUdevice dev) {
 	using FuncPtr = CUresult(CUDAAPI *)(size_t *, CUdevice);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuDeviceTotalMem_v2");
 	if (!func_ptr) return GetSymbolNotFoundError();
-	return func_ptr(bytes, dev);
+	auto ret = func_ptr(bytes, dev);
+	if(ret==CUDA_SUCCESS){
+		printf("changed return mem size\n");
+		*bytes=gmem_visible;
+	}
+	return ret;
 }
 
 CUresult CUDAAPI cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev) {
@@ -599,7 +606,13 @@ CUresult CUDAAPI cuMemAlloc(CUdeviceptr *dptr, size_t bytesize) {
 	using FuncPtr = CUresult(CUDAAPI *)(CUdeviceptr *, size_t);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuMemAlloc_v2");
 	if (!func_ptr) return GetSymbolNotFoundError();
-	return func_ptr(dptr, bytesize);
+
+	if(gmem_used+bytesize<=gmem_visible) {
+		gmem_used+=bytesize;
+		return func_ptr(dptr, bytesize);
+	}
+	else
+		return CUDA_ERROR_OUT_OF_MEMORY;
 }
 
 CUresult CUDAAPI
@@ -690,7 +703,13 @@ CUresult CUDAAPI cuMemAllocManaged(CUdeviceptr *dptr, size_t bytesize, unsigned 
 	using FuncPtr = CUresult(CUDAAPI *)(CUdeviceptr *, size_t, unsigned int);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuMemAllocManaged");
 	if (!func_ptr) return GetSymbolNotFoundError();
-	return func_ptr(dptr, bytesize, flags);
+
+	if(gmem_used+bytesize<=gmem_visible) {
+		gmem_used+=bytesize;
+		return func_ptr(dptr, bytesize, flags);
+	}
+	else
+		return CUDA_ERROR_OUT_OF_MEMORY;
 }
 
 CUresult CUDAAPI cuDeviceGetByPCIBusId(CUdevice *dev, const char *pciBusId) {
