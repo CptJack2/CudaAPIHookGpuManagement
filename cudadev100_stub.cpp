@@ -2,12 +2,16 @@
 #include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include<map>
+
+using namespace std;
 
 #define TRACE_API_CALL
 
 static void *cudadev_handle = nullptr;
 static size_t gmem_visible=3*1024*1024*1024;
 static size_t gmem_used=0;
+static map<CUdeviceptr,size_t> ptr_usage;
 
 static void LoadLibrary() {
 	cudadev_handle = dlopen("/usr/lib/x86_64-linux-gnu/libcuda.so.1.orig", RTLD_NOW | RTLD_LOCAL);
@@ -161,6 +165,7 @@ CUresult CUDAAPI cuDeviceTotalMem(size_t *bytes, CUdevice dev) {
 	using FuncPtr = CUresult(CUDAAPI *)(size_t *, CUdevice);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuDeviceTotalMem_v2");
 	if (!func_ptr) return GetSymbolNotFoundError();
+
 	auto ret = func_ptr(bytes, dev);
 	if(ret==CUDA_SUCCESS){
 		printf("changed return mem size\n");
@@ -615,7 +620,9 @@ CUresult CUDAAPI cuMemAlloc(CUdeviceptr *dptr, size_t bytesize) {
 
 	if(gmem_used+bytesize<=gmem_visible) {
 		gmem_used+=bytesize;
-		return func_ptr(dptr, bytesize);
+		auto ret = func_ptr(dptr, bytesize);
+		ptr_usage[*dptr]=bytesize;
+		return ret;
 	}
 	else
 		return CUDA_ERROR_OUT_OF_MEMORY;
@@ -639,7 +646,14 @@ CUresult CUDAAPI cuMemFree(CUdeviceptr dptr) {
 	using FuncPtr = CUresult(CUDAAPI *)(CUdeviceptr);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuMemFree_v2");
 	if (!func_ptr) return GetSymbolNotFoundError();
-	return func_ptr(dptr);
+
+	auto ret = func_ptr(dptr);
+	//TODO 确定当free失败时cuda的行为
+	if(ret==CUDA_SUCCESS){
+		gmem_used-=ptr_usage[dptr];
+		ptr_usage.erase(dptr);
+	}
+	return ret;
 }
 
 CUresult CUDAAPI cuMemGetAddressRange(CUdeviceptr *pbase, size_t *psize, CUdeviceptr dptr) {
@@ -712,7 +726,9 @@ CUresult CUDAAPI cuMemAllocManaged(CUdeviceptr *dptr, size_t bytesize, unsigned 
 
 	if(gmem_used+bytesize<=gmem_visible) {
 		gmem_used+=bytesize;
-		return func_ptr(dptr, bytesize, flags);
+		auto ret = func_ptr(dptr, bytesize, flags);
+		ptr_usage[*dptr]=bytesize;
+		return ret;
 	}
 	else
 		return CUDA_ERROR_OUT_OF_MEMORY;
