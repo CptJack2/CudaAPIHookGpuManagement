@@ -596,7 +596,13 @@ CUresult CUDAAPI cuMemGetInfo(size_t *free, size_t *total) {
 	using FuncPtr = CUresult(CUDAAPI *)(size_t *, size_t *);
 	static auto func_ptr = LoadSymbol<FuncPtr>("cuMemGetInfo_v2");
 	if (!func_ptr) return GetSymbolNotFoundError();
-	return func_ptr(free, total);
+
+	auto ret = func_ptr(free, total);
+	if(ret==CUDA_SUCCESS){
+		*free=gmem_visible-gmem_used;
+		*total=gmem_visible;
+	}
+	return ret;
 }
 
 CUresult CUDAAPI cuMemAlloc(CUdeviceptr *dptr, size_t bytesize) {
