@@ -24,3 +24,5 @@ Have fun!
 限制能使用的显存量在cudadev100_stub.cpp：gmem_visible指出。
 
 目前本库处于beta版本，能对基于libcuda开发的程序做显存限制功能。已在CUDA 10.0 Tensorflow 1.14版本上，使用全链接网络和lenet5测试成功。欢迎加入测试，提issue，贡献代码。
+
+搭配docker+nvidia docker，在docker容器内置本库，可得合伙炼丹，和谐分用效果。
